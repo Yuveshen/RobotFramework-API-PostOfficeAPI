@@ -1,0 +1,1075 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20160801 11:22:38.993" generator="Robot 3.0 (Python 2.7.12 on win32)">
+<suite source="C:\Users\ygovender\PycharmProjects\PostOfficeAPI\tests\post_code_search.robot" id="s1" name="Post Code Search">
+<test id="s1-t1" name="North Rocks postcode is 2151">
+<kw name="Post Code Search">
+<doc>This test suite uses a data driven approach to test the auspost postcode search API endpoint</doc>
+<arguments>
+<arg>North Rocks</arg>
+<arg>NSW</arg>
+<arg>2151</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>AUTH-KEY=5d5dc400-9405-4f17-9f82-251b69ebbd10</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.158" level="INFO">${headers} = {u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.158" starttime="20160801 11:22:39.158"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>q=${Suburb}</arg>
+<arg>state=${State}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.159" level="INFO">${params} = {u'q': u'North Rocks', u'state': u'NSW'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.159" starttime="20160801 11:22:39.158"></status>
+</kw>
+<kw name="Given create api session" library="api_interaction">
+<doc>Creates a session to a supplied URL with headers and parameters</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>https://digitalapi.auspost.com.au/postcode</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${SESSION}</arg>
+<arg>${URL}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.160" level="INFO">Creating Session using : alias=postcode_search, url=https://digitalapi.auspost.com.au/postcode, headers={},                     cookies=None, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20160801 11:22:39.160" starttime="20160801 11:22:39.159"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.160" starttime="20160801 11:22:39.159"></status>
+</kw>
+<kw name="When send get request" library="api_interaction">
+<doc>Sends a get request to the opened session</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>/search.json</arg>
+<arg>${headers}</arg>
+<arg>${params}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${Session}</arg>
+<arg>${URI}</arg>
+<arg>headers=${HEADERS}</arg>
+<arg>params=${PARAMS}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.184" level="INFO">Starting new HTTPS connection (1): digitalapi.auspost.com.au</msg>
+<msg timestamp="20160801 11:22:39.599" level="INFO">Get Request using : alias=postcode_search, uri=/search.json, headers={u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'} </msg>
+<msg timestamp="20160801 11:22:39.600" level="INFO">C:\Python27\lib\site-packages\requests\packages\urllib3\connectionpool.py:821: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+  InsecureRequestWarning)</msg>
+<msg timestamp="20160801 11:22:39.600" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.600" starttime="20160801 11:22:39.161"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.600" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.601" starttime="20160801 11:22:39.600"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+<arg>pretty_print=True</arg>
+</arguments>
+<assign>
+<var>${output}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.601" level="INFO">To JSON using : content={"localities":{"locality":{"category":"Delivery Area","id":885,"latitude":-33.768119,"location":"NORTH ROCKS","longitude":151.02854,"postcode":2151,"state":"NSW"}}} </msg>
+<msg timestamp="20160801 11:22:39.601" level="INFO">To JSON using : pretty_print=True </msg>
+<msg timestamp="20160801 11:22:39.601" level="INFO">${output} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 885,
+            "latitude": -33.768119,
+            "location": "NORTH ROCKS",
+            "long...</msg>
+<status status="PASS" endtime="20160801 11:22:39.601" starttime="20160801 11:22:39.601"></status>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${output}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.602" level="INFO">${json} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 885,
+            "latitude": -33.768119,
+            "location": "NORTH ROCKS",
+            "long...</msg>
+<status status="PASS" endtime="20160801 11:22:39.602" starttime="20160801 11:22:39.601"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.603" level="INFO">{
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 885,
+            "latitude": -33.768119,
+            "location": "NORTH ROCKS",
+            "longitude": 151.02854,
+            "postcode": 2151,
+            "state": "NSW"
+        }
+    }
+}</msg>
+<status status="PASS" endtime="20160801 11:22:39.603" starttime="20160801 11:22:39.602"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.603" starttime="20160801 11:22:39.160"></status>
+</kw>
+<kw name="Then json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>id</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.603" starttime="20160801 11:22:39.603"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.604" starttime="20160801 11:22:39.603"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>latitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.605" starttime="20160801 11:22:39.605"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.606" starttime="20160801 11:22:39.604"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>longitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.606" starttime="20160801 11:22:39.606"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.607" starttime="20160801 11:22:39.606"></status>
+</kw>
+<kw name="And json key equals" library="api_interaction">
+<doc>checks that a certain key in the returned json has an expected value</doc>
+<arguments>
+<arg>postcode</arg>
+<arg>${ExpectedPostcode}</arg>
+</arguments>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>"${key}": ${value}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.608" starttime="20160801 11:22:39.607"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.608" starttime="20160801 11:22:39.607"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.608" starttime="20160801 11:22:39.157"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.608" critical="yes" starttime="20160801 11:22:39.157"></status>
+</test>
+<test id="s1-t2" name="Altona Meadows postcode is 3028">
+<kw name="Post Code Search">
+<doc>This test suite uses a data driven approach to test the auspost postcode search API endpoint</doc>
+<arguments>
+<arg>Altona Meadows</arg>
+<arg>VIC</arg>
+<arg>3028</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>AUTH-KEY=5d5dc400-9405-4f17-9f82-251b69ebbd10</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.610" level="INFO">${headers} = {u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.610" starttime="20160801 11:22:39.609"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>q=${Suburb}</arg>
+<arg>state=${State}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.610" level="INFO">${params} = {u'q': u'Altona Meadows', u'state': u'VIC'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.610" starttime="20160801 11:22:39.610"></status>
+</kw>
+<kw name="Given create api session" library="api_interaction">
+<doc>Creates a session to a supplied URL with headers and parameters</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>https://digitalapi.auspost.com.au/postcode</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${SESSION}</arg>
+<arg>${URL}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.611" level="INFO">Creating Session using : alias=postcode_search, url=https://digitalapi.auspost.com.au/postcode, headers={},                     cookies=None, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20160801 11:22:39.612" starttime="20160801 11:22:39.610"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.612" starttime="20160801 11:22:39.610"></status>
+</kw>
+<kw name="When send get request" library="api_interaction">
+<doc>Sends a get request to the opened session</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>/search.json</arg>
+<arg>${headers}</arg>
+<arg>${params}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${Session}</arg>
+<arg>${URI}</arg>
+<arg>headers=${HEADERS}</arg>
+<arg>params=${PARAMS}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.614" level="INFO">Starting new HTTPS connection (1): digitalapi.auspost.com.au</msg>
+<msg timestamp="20160801 11:22:39.671" level="INFO">Get Request using : alias=postcode_search, uri=/search.json, headers={u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'} </msg>
+<msg timestamp="20160801 11:22:39.671" level="INFO">C:\Python27\lib\site-packages\requests\packages\urllib3\connectionpool.py:821: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+  InsecureRequestWarning)</msg>
+<msg timestamp="20160801 11:22:39.671" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.671" starttime="20160801 11:22:39.612"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.672" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.672" starttime="20160801 11:22:39.672"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+<arg>pretty_print=True</arg>
+</arguments>
+<assign>
+<var>${output}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.673" level="INFO">To JSON using : content={"localities":{"locality":{"category":"Delivery Area","id":5434,"latitude":-37.871632,"location":"ALTONA MEADOWS","longitude":144.778084,"postcode":3028,"state":"VIC"}}} </msg>
+<msg timestamp="20160801 11:22:39.673" level="INFO">To JSON using : pretty_print=True </msg>
+<msg timestamp="20160801 11:22:39.673" level="INFO">${output} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 5434,
+            "latitude": -37.871632,
+            "location": "ALTONA MEADOWS",
+            "...</msg>
+<status status="PASS" endtime="20160801 11:22:39.673" starttime="20160801 11:22:39.672"></status>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${output}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.674" level="INFO">${json} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 5434,
+            "latitude": -37.871632,
+            "location": "ALTONA MEADOWS",
+            "...</msg>
+<status status="PASS" endtime="20160801 11:22:39.674" starttime="20160801 11:22:39.674"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.675" level="INFO">{
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 5434,
+            "latitude": -37.871632,
+            "location": "ALTONA MEADOWS",
+            "longitude": 144.778084,
+            "postcode": 3028,
+            "state": "VIC"
+        }
+    }
+}</msg>
+<status status="PASS" endtime="20160801 11:22:39.675" starttime="20160801 11:22:39.674"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.675" starttime="20160801 11:22:39.612"></status>
+</kw>
+<kw name="Then json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>id</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.676" starttime="20160801 11:22:39.676"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.676" starttime="20160801 11:22:39.675"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>latitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.677" starttime="20160801 11:22:39.677"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.677" starttime="20160801 11:22:39.676"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>longitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.678" starttime="20160801 11:22:39.678"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.679" starttime="20160801 11:22:39.678"></status>
+</kw>
+<kw name="And json key equals" library="api_interaction">
+<doc>checks that a certain key in the returned json has an expected value</doc>
+<arguments>
+<arg>postcode</arg>
+<arg>${ExpectedPostcode}</arg>
+</arguments>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>"${key}": ${value}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.680" starttime="20160801 11:22:39.680"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.680" starttime="20160801 11:22:39.679"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.680" starttime="20160801 11:22:39.609"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.680" critical="yes" starttime="20160801 11:22:39.608"></status>
+</test>
+<test id="s1-t3" name="Mount Colah postcode is 2079">
+<kw name="Post Code Search">
+<doc>This test suite uses a data driven approach to test the auspost postcode search API endpoint</doc>
+<arguments>
+<arg>Mount Colah</arg>
+<arg>NSW</arg>
+<arg>2079</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>AUTH-KEY=5d5dc400-9405-4f17-9f82-251b69ebbd10</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.681" level="INFO">${headers} = {u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.681" starttime="20160801 11:22:39.681"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>q=${Suburb}</arg>
+<arg>state=${State}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.683" level="INFO">${params} = {u'q': u'Mount Colah', u'state': u'NSW'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.683" starttime="20160801 11:22:39.682"></status>
+</kw>
+<kw name="Given create api session" library="api_interaction">
+<doc>Creates a session to a supplied URL with headers and parameters</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>https://digitalapi.auspost.com.au/postcode</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${SESSION}</arg>
+<arg>${URL}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.683" level="INFO">Creating Session using : alias=postcode_search, url=https://digitalapi.auspost.com.au/postcode, headers={},                     cookies=None, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20160801 11:22:39.684" starttime="20160801 11:22:39.683"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.684" starttime="20160801 11:22:39.683"></status>
+</kw>
+<kw name="When send get request" library="api_interaction">
+<doc>Sends a get request to the opened session</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>/search.json</arg>
+<arg>${headers}</arg>
+<arg>${params}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${Session}</arg>
+<arg>${URI}</arg>
+<arg>headers=${HEADERS}</arg>
+<arg>params=${PARAMS}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.687" level="INFO">Starting new HTTPS connection (1): digitalapi.auspost.com.au</msg>
+<msg timestamp="20160801 11:22:39.744" level="INFO">Get Request using : alias=postcode_search, uri=/search.json, headers={u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'} </msg>
+<msg timestamp="20160801 11:22:39.744" level="INFO">C:\Python27\lib\site-packages\requests\packages\urllib3\connectionpool.py:821: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+  InsecureRequestWarning)</msg>
+<msg timestamp="20160801 11:22:39.745" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.745" starttime="20160801 11:22:39.685"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.746" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.747" starttime="20160801 11:22:39.745"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+<arg>pretty_print=True</arg>
+</arguments>
+<assign>
+<var>${output}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.748" level="INFO">To JSON using : content={"localities":{"locality":{"category":"Delivery Area","id":682,"latitude":-33.670869,"location":"MOUNT COLAH","longitude":151.115118,"postcode":2079,"state":"NSW"}}} </msg>
+<msg timestamp="20160801 11:22:39.748" level="INFO">To JSON using : pretty_print=True </msg>
+<msg timestamp="20160801 11:22:39.749" level="INFO">${output} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 682,
+            "latitude": -33.670869,
+            "location": "MOUNT COLAH",
+            "long...</msg>
+<status status="PASS" endtime="20160801 11:22:39.749" starttime="20160801 11:22:39.747"></status>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${output}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.750" level="INFO">${json} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 682,
+            "latitude": -33.670869,
+            "location": "MOUNT COLAH",
+            "long...</msg>
+<status status="PASS" endtime="20160801 11:22:39.750" starttime="20160801 11:22:39.749"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.752" level="INFO">{
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 682,
+            "latitude": -33.670869,
+            "location": "MOUNT COLAH",
+            "longitude": 151.115118,
+            "postcode": 2079,
+            "state": "NSW"
+        }
+    }
+}</msg>
+<status status="PASS" endtime="20160801 11:22:39.752" starttime="20160801 11:22:39.751"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.753" starttime="20160801 11:22:39.684"></status>
+</kw>
+<kw name="Then json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>id</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.756" starttime="20160801 11:22:39.754"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.756" starttime="20160801 11:22:39.753"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>latitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.759" starttime="20160801 11:22:39.758"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.759" starttime="20160801 11:22:39.757"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>longitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.761" starttime="20160801 11:22:39.760"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.762" starttime="20160801 11:22:39.760"></status>
+</kw>
+<kw name="And json key equals" library="api_interaction">
+<doc>checks that a certain key in the returned json has an expected value</doc>
+<arguments>
+<arg>postcode</arg>
+<arg>${ExpectedPostcode}</arg>
+</arguments>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>"${key}": ${value}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.764" starttime="20160801 11:22:39.763"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.765" starttime="20160801 11:22:39.762"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.765" starttime="20160801 11:22:39.681"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.765" critical="yes" starttime="20160801 11:22:39.680"></status>
+</test>
+<test id="s1-t4" name="Williamstown postcode is 3016">
+<kw name="Post Code Search">
+<doc>This test suite uses a data driven approach to test the auspost postcode search API endpoint</doc>
+<arguments>
+<arg>Williamstown</arg>
+<arg>VIC</arg>
+<arg>3016</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>AUTH-KEY=5d5dc400-9405-4f17-9f82-251b69ebbd10</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.769" level="INFO">${headers} = {u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.769" starttime="20160801 11:22:39.768"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>q=${Suburb}</arg>
+<arg>state=${State}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.771" level="INFO">${params} = {u'q': u'Williamstown', u'state': u'VIC'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.771" starttime="20160801 11:22:39.770"></status>
+</kw>
+<kw name="Given create api session" library="api_interaction">
+<doc>Creates a session to a supplied URL with headers and parameters</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>https://digitalapi.auspost.com.au/postcode</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${SESSION}</arg>
+<arg>${URL}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.774" level="INFO">Creating Session using : alias=postcode_search, url=https://digitalapi.auspost.com.au/postcode, headers={},                     cookies=None, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20160801 11:22:39.776" starttime="20160801 11:22:39.773"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.777" starttime="20160801 11:22:39.772"></status>
+</kw>
+<kw name="When send get request" library="api_interaction">
+<doc>Sends a get request to the opened session</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>/search.json</arg>
+<arg>${headers}</arg>
+<arg>${params}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${Session}</arg>
+<arg>${URI}</arg>
+<arg>headers=${HEADERS}</arg>
+<arg>params=${PARAMS}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.785" level="INFO">Starting new HTTPS connection (1): digitalapi.auspost.com.au</msg>
+<msg timestamp="20160801 11:22:39.855" level="INFO">Get Request using : alias=postcode_search, uri=/search.json, headers={u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'} </msg>
+<msg timestamp="20160801 11:22:39.855" level="INFO">C:\Python27\lib\site-packages\requests\packages\urllib3\connectionpool.py:821: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+  InsecureRequestWarning)</msg>
+<msg timestamp="20160801 11:22:39.856" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.856" starttime="20160801 11:22:39.779"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.857" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.857" starttime="20160801 11:22:39.856"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+<arg>pretty_print=True</arg>
+</arguments>
+<assign>
+<var>${output}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.858" level="INFO">To JSON using : content={"localities":{"locality":[{"category":"Delivery Area","id":5401,"latitude":-37.856902,"location":"WILLIAMSTOWN","longitude":144.897698,"postcode":3016,"state":"VIC"},{"category":"Delivery Area","id":5402,"latitude":-37.857681,"location":"WILLIAMSTOWN NORTH","longitude":144.887041,"postcode":3016,"state":"VIC"}]}} </msg>
+<msg timestamp="20160801 11:22:39.858" level="INFO">To JSON using : pretty_print=True </msg>
+<msg timestamp="20160801 11:22:39.858" level="INFO">${output} = {
+    "localities": {
+        "locality": [
+            {
+                "category": "Delivery Area",
+                "id": 5401,
+                "latitude": -37.856902,
+                "location": "...</msg>
+<status status="PASS" endtime="20160801 11:22:39.858" starttime="20160801 11:22:39.857"></status>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${output}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.859" level="INFO">${json} = {
+    "localities": {
+        "locality": [
+            {
+                "category": "Delivery Area",
+                "id": 5401,
+                "latitude": -37.856902,
+                "location": "...</msg>
+<status status="PASS" endtime="20160801 11:22:39.859" starttime="20160801 11:22:39.858"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.860" level="INFO">{
+    "localities": {
+        "locality": [
+            {
+                "category": "Delivery Area",
+                "id": 5401,
+                "latitude": -37.856902,
+                "location": "WILLIAMSTOWN",
+                "longitude": 144.897698,
+                "postcode": 3016,
+                "state": "VIC"
+            },
+            {
+                "category": "Delivery Area",
+                "id": 5402,
+                "latitude": -37.857681,
+                "location": "WILLIAMSTOWN NORTH",
+                "longitude": 144.887041,
+                "postcode": 3016,
+                "state": "VIC"
+            }
+        ]
+    }
+}</msg>
+<status status="PASS" endtime="20160801 11:22:39.860" starttime="20160801 11:22:39.859"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.860" starttime="20160801 11:22:39.777"></status>
+</kw>
+<kw name="Then json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>id</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.862" starttime="20160801 11:22:39.861"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.862" starttime="20160801 11:22:39.860"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>latitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.863" starttime="20160801 11:22:39.863"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.863" starttime="20160801 11:22:39.862"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>longitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.865" starttime="20160801 11:22:39.864"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.865" starttime="20160801 11:22:39.864"></status>
+</kw>
+<kw name="And json key equals" library="api_interaction">
+<doc>checks that a certain key in the returned json has an expected value</doc>
+<arguments>
+<arg>postcode</arg>
+<arg>${ExpectedPostcode}</arg>
+</arguments>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>"${key}": ${value}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.866" starttime="20160801 11:22:39.866"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.867" starttime="20160801 11:22:39.865"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.867" starttime="20160801 11:22:39.767"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.867" critical="yes" starttime="20160801 11:22:39.766"></status>
+</test>
+<test id="s1-t5" name="Kensington postcode is 3031">
+<kw name="Post Code Search">
+<doc>This test suite uses a data driven approach to test the auspost postcode search API endpoint</doc>
+<arguments>
+<arg>Kensington</arg>
+<arg>VIC</arg>
+<arg>3031</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>AUTH-KEY=5d5dc400-9405-4f17-9f82-251b69ebbd10</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.869" level="INFO">${headers} = {u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.869" starttime="20160801 11:22:39.868"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>q=${Suburb}</arg>
+<arg>state=${State}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.870" level="INFO">${params} = {u'q': u'Kensington', u'state': u'VIC'}</msg>
+<status status="PASS" endtime="20160801 11:22:39.870" starttime="20160801 11:22:39.869"></status>
+</kw>
+<kw name="Given create api session" library="api_interaction">
+<doc>Creates a session to a supplied URL with headers and parameters</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>https://digitalapi.auspost.com.au/postcode</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>${SESSION}</arg>
+<arg>${URL}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.871" level="INFO">Creating Session using : alias=postcode_search, url=https://digitalapi.auspost.com.au/postcode, headers={},                     cookies=None, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20160801 11:22:39.872" starttime="20160801 11:22:39.871"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.872" starttime="20160801 11:22:39.870"></status>
+</kw>
+<kw name="When send get request" library="api_interaction">
+<doc>Sends a get request to the opened session</doc>
+<arguments>
+<arg>postcode_search</arg>
+<arg>/search.json</arg>
+<arg>${headers}</arg>
+<arg>${params}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>${Session}</arg>
+<arg>${URI}</arg>
+<arg>headers=${HEADERS}</arg>
+<arg>params=${PARAMS}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.876" level="INFO">Starting new HTTPS connection (1): digitalapi.auspost.com.au</msg>
+<msg timestamp="20160801 11:22:39.939" level="INFO">Get Request using : alias=postcode_search, uri=/search.json, headers={u'AUTH-KEY': u'5d5dc400-9405-4f17-9f82-251b69ebbd10'} </msg>
+<msg timestamp="20160801 11:22:39.939" level="INFO">C:\Python27\lib\site-packages\requests\packages\urllib3\connectionpool.py:821: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+  InsecureRequestWarning)</msg>
+<msg timestamp="20160801 11:22:39.939" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.940" starttime="20160801 11:22:39.873"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.940" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20160801 11:22:39.940" starttime="20160801 11:22:39.940"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+<arg>pretty_print=True</arg>
+</arguments>
+<assign>
+<var>${output}</var>
+</assign>
+<msg timestamp="20160801 11:22:39.941" level="INFO">To JSON using : content={"localities":{"locality":{"category":"Delivery Area","id":5447,"latitude":-37.794333,"location":"KENSINGTON","longitude":144.929217,"postcode":3031,"state":"VIC"}}} </msg>
+<msg timestamp="20160801 11:22:39.941" level="INFO">To JSON using : pretty_print=True </msg>
+<msg timestamp="20160801 11:22:39.941" level="INFO">${output} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 5447,
+            "latitude": -37.794333,
+            "location": "KENSINGTON",
+            "long...</msg>
+<status status="PASS" endtime="20160801 11:22:39.941" starttime="20160801 11:22:39.940"></status>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${output}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.941" level="INFO">${json} = {
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 5447,
+            "latitude": -37.794333,
+            "location": "KENSINGTON",
+            "long...</msg>
+<status status="PASS" endtime="20160801 11:22:39.941" starttime="20160801 11:22:39.941"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json}</arg>
+</arguments>
+<msg timestamp="20160801 11:22:39.942" level="INFO">{
+    "localities": {
+        "locality": {
+            "category": "Delivery Area",
+            "id": 5447,
+            "latitude": -37.794333,
+            "location": "KENSINGTON",
+            "longitude": 144.929217,
+            "postcode": 3031,
+            "state": "VIC"
+        }
+    }
+}</msg>
+<status status="PASS" endtime="20160801 11:22:39.942" starttime="20160801 11:22:39.942"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.942" starttime="20160801 11:22:39.872"></status>
+</kw>
+<kw name="Then json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>id</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.943" starttime="20160801 11:22:39.942"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.943" starttime="20160801 11:22:39.942"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>latitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.944" starttime="20160801 11:22:39.943"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.944" starttime="20160801 11:22:39.943"></status>
+</kw>
+<kw name="And json key exists" library="api_interaction">
+<doc>checks for the existence of a key in the returned json</doc>
+<arguments>
+<arg>longitude</arg>
+</arguments>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>${key}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.945" starttime="20160801 11:22:39.945"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.945" starttime="20160801 11:22:39.944"></status>
+</kw>
+<kw name="And json key equals" library="api_interaction">
+<doc>checks that a certain key in the returned json has an expected value</doc>
+<arguments>
+<arg>postcode</arg>
+<arg>${ExpectedPostcode}</arg>
+</arguments>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${json}</arg>
+<arg>"${key}": ${value}</arg>
+</arguments>
+<status status="PASS" endtime="20160801 11:22:39.946" starttime="20160801 11:22:39.946"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.946" starttime="20160801 11:22:39.945"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.946" starttime="20160801 11:22:39.868"></status>
+</kw>
+<status status="PASS" endtime="20160801 11:22:39.947" critical="yes" starttime="20160801 11:22:39.867"></status>
+</test>
+<status status="PASS" endtime="20160801 11:22:39.947" starttime="20160801 11:22:38.997"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="5">Critical Tests</stat>
+<stat fail="0" pass="5">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="Post Code Search" pass="5">Post Code Search</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
